@@ -8,8 +8,9 @@
     <div class="row">
         {% for product in product_chunks %}
         <div class="col-4">
-            <a href="{% url 'product_details' %}"><img src="{{ product.image.url }}"></a>
-            <h4>{{ product.title }}</h4>
+            <a href="{% url 'product_details' product.id %}"><img src="{{ product.image.url }}"></a>
+            <h3>{{ product.title }}</h3>
+            <h4>{{ product.author }}</h4>
             <div class="rating">
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
@@ -17,15 +18,20 @@
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star-o"></i>
             </div>
-            <p>$50.00</p>
+            <p> ₹{{ product.price }}</p>
         </div>
         {% endfor %}   
     </div>
     {% endfor %}
     <div class="page-btn">
+        {% if products.has_previous %}
+        <a href="?page={{products.previous_page_number }}"><span><<</span></a>   
+        {% endif %}
         {% for i in products.paginator.page_range %}
-        <a href="?page={{i}}"><span>{{i}}</span></a>
-        
+        <a href="?page={{i}}"><span>{{i}}</span></a>    
         {% endfor %}
+        {% if products.has_next %}
+        <a href="?page={{products.next_page_number }}"><span>>></span></a>   
+        {% endif %}
     </div>
 </div>

@@ -6,6 +6,7 @@ class Product(models.Model):
     DELETE=0
     DELETE_CHOICES=((LIVE,'Live'),(DELETE,'Delete'))
     title=models.CharField(max_length=200)
+    author=models.CharField(max_length=200)
     price=models.FloatField()
     description=models.TextField()
     image=models.ImageField(upload_to='media')

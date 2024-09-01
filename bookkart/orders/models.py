@@ -11,7 +11,13 @@ class Order(models.Model):
     ORDER_PROCESSED=2
     ORDER_DELIVERED=3
     ORDER_REJECTED=4
-    STATUS_CHOICE=((ORDER_PROCESSED,"ORDER_PROCESSED"),(ORDER_DELIVERED,"ORDER_DELIVERED"),(ORDER_REJECTED,"ORDER_REJECTED"))
+    STATUS_CHOICE = (
+        (CART_STAGE, "Cart Stage"),
+        (ORDER_CONFIRMED, "Order Confirmed"),
+        (ORDER_PROCESSED, "Order Processed"),
+        (ORDER_DELIVERED, "Order Delivered"),
+        (ORDER_REJECTED, "Order Rejected")
+    )
     order_status=models.IntegerField(choices=STATUS_CHOICE,default=CART_STAGE)
 
     owner = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, related_name='orders')
@@ -20,10 +26,11 @@ class Order(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
 
 class OrderedItem(models.Model):
-    Product=models.ForeignKey(Product,related_name='added_carts',on_delete=models.SET_NULL,null=True)
+    product=models.ForeignKey(Product,related_name='added_carts',on_delete=models.SET_NULL,null=True)
     quantity=models.IntegerField(default=1)
     owner=models.ForeignKey(Order,on_delete=models.CASCADE,related_name='added_items')
     
-    
+    class Meta:
+        unique_together = ('product', 'owner')  # This ensures no duplicates
     def __str__(self) -> str:
         return f'{self.quantity} of {self.product.name}'
